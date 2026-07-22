@@ -10,17 +10,35 @@ const App = () => {
   });
   const [editingRecord, setEditingRecord] = useState(null);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [tableFilter, setTableFilter] = useState('All');
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
   
   // --- Computed Stats ---
   const totalRecords = records.length;
   const totalPresent = records.filter(r => r.attendance === 'Present').length;
   const totalAbsent = records.filter(r => r.attendance === 'Absent').length;
 
+  const filteredRecords = tableFilter === 'All' 
+    ? records 
+    : records.filter(record => record.attendance === tableFilter);
+
   useEffect(() => {
     localStorage.setItem('attendanceRecords', JSON.stringify(records));
   }, [records]);
 
-  // --- CRUD Operations ---
+  // --- Scroll Listener for Floating Button ---
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollBtn(true);
+      } else {
+        setShowScrollBtn(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleAddRecord = (newRecord) => {
     setRecords([...records, { ...newRecord, id: Date.now() }]);
   };
@@ -51,22 +69,31 @@ const App = () => {
       {!showDashboard ? (
         <div className="home-page">
           <div className="home-left-table">
-            <AttendanceTable records={records} readonly={true} />
+            <AttendanceTable records={filteredRecords} readonly={true} />
           </div>
           <div className="home-content">
             <h1 className="home-title">Attendance<br/>Portal</h1>
             <p className="home-subtitle">Manage your team securely with dashboard.</p>
             
             <div className="home-stats">
-              <div className="stat-box">
+              <div 
+                className={`stat-box ${tableFilter === 'All' ? 'active-filter' : ''}`}
+                onClick={() => setTableFilter('All')}
+              >
                 <h3>{totalRecords}</h3>
                 <p>Total Members</p>
               </div>
-              <div className="stat-box">
+              <div 
+                className={`stat-box ${tableFilter === 'Present' ? 'active-filter' : ''}`}
+                onClick={() => setTableFilter('Present')}
+              >
                 <h3 className="stat-present">{totalPresent}</h3>
                 <p>Present</p>
               </div>
-              <div className="stat-box">
+              <div 
+                className={`stat-box ${tableFilter === 'Absent' ? 'active-filter' : ''}`}
+                onClick={() => setTableFilter('Absent')}
+              >
                 <h3 className="stat-absent">{totalAbsent}</h3>
                 <p>Absent</p>
               </div>
@@ -102,6 +129,19 @@ const App = () => {
             editingId={editingRecord?.id || null} 
           />
         </div>
+      )}
+
+      {/* Floating Back to Home Button */}
+      {showDashboard && showScrollBtn && (
+        <button 
+          className="floating-back-btn"
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setShowDashboard(false);
+          }}
+        >
+          ⟵ Home
+        </button>
       )}
     </div>
   );

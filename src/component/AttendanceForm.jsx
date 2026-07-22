@@ -49,8 +49,8 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord, records }) =
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           
-          // Compress into a JPEG with 70% quality to save localStorage space
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          // Compress into a JPEG with 80% quality to save localStorage space
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
 
           setImgPreview(compressedDataUrl);
           setFormData(prev => ({ ...prev, profileImage: compressedDataUrl }));
