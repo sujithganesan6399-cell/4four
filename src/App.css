@@ -1,5 +1,5 @@
 /* Import Display Font (Oswald) and clean Body Font (Outfit) */
-@import url("https://fonts.googleapis.com/css2?family=Agu+Display&display=swap stylesheet.com/css2?family=Outfit:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap");
+@import url("preconnect https://fonts.googleapis.com preconnect https://fonts.gstatic.com https://fonts.googleapis.com/css2?family=Agu+Display&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
 
 :root {
   --primary-bg: #f5f5f5; 
@@ -35,11 +35,166 @@ body {
   z-index: 1;
 }
 
+/* --- Home Page Styles --- */
+.home-page {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  min-height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.home-left-table {
+  flex: 1;
+  max-width: 60%;
+  background-color: rgba(245, 245, 245, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  animation: floating 5.5s ease-in-out infinite reverse;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Internal table resets for the home table */
+.home-left-table .table-container {
+  box-shadow: none; /* Let the glass parent handle the shadow */
+}
+
+.home-content {
+  flex: 1;
+  max-width: 40%;
+  background-color: rgba(245, 245, 245, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 60px 50px;
+  border-radius: 20px;
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  animation: floating 5s ease-in-out infinite;
+}
+
+.home-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 5rem;
+  line-height: 1.1;
+  margin: 0 0 20px 0;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.home-subtitle {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.home-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.stat-box {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  min-width: 120px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s;
+}
+
+.stat-box:hover {
+  transform: translateY(-3px);
+}
+
+.stat-box h3 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.5rem;
+  margin: 0 0 5px 0;
+  color: var(--text-dark);
+}
+
+.stat-box p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-box .stat-present { color: #28a745; }
+.stat-box .stat-absent { color: #dc3545; }
+
+.btn-enter-dashboard {
+  background-color: var(--secondary-accent);
+  color: var(--text-dark);
+  padding: 18px 40px;
+  font-size: 1.4rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Oswald', sans-serif;
+  border: none;
+}
+
+.btn-enter-dashboard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 3px solid var(--secondary-accent);
+  padding-bottom: 15px;
+  margin-bottom: 40px;
+}
+
+.dashboard-header h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.btn-back {
+  background-color: transparent;
+  border: 2px solid #ccc;
+  color: #555;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+  background-color: #eee;
+  border-color: #999;
+  transform: translateY(-2px);
+}
+
 /* Give the dashboard its own background to stand out */
 .dashboard-container {
   position: relative;
   z-index: 10;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   background-color: rgba(245, 245, 245, 0.4);
   backdrop-filter: blur(10px);
@@ -68,6 +223,9 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   margin-bottom: 50px;
   border-left: 6px solid var(--secondary-accent);
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
 }
 
 .form-group {
@@ -238,7 +396,7 @@ table {
 }
 
 th, td {
-  padding: 18px 15px; /* Elaborated table cell space */
+  padding: 18px 15px; 
   text-align: left;
   border-bottom: 1px solid #eee;
 }
@@ -309,4 +467,112 @@ th {
   font-size: 1.1rem;
   max-width: 400px;
   margin: 0;
+}
+@keyframes vibrate{
+  0% {transform: translateY(0%);}
+  20%{transform: translateY(-12%);}
+  40%{transform: translateY(12%);}
+  60%{transform: translateY(-12%);}
+  80%{transform: translateY(12%);}
+  100%{transform: translateY(0%);}
+}
+.from.vibrate{
+  animation : vibrate 0.4s cubic-bezier(.36,.07,.19,.97);
+  border-left-color: var(--tertiary-error);
+}
+.form-error-alert {
+  background-color: #ffcccc;
+  color: var(--tertiary-error);
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 25px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 1px solid var(--tertiary-error);
+  box-shadow: 0 4px 10px rgba(171, 21, 9, 0.15);
+}
+/* --- Antigravity Image Frame & Placeholder --- */
+.form-image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.floating-image-preview {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.5);
+  animation: floating 4s ease-in-out infinite;
+}
+
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(200,200,200,0.8);
+  border-radius: 16px;
+  color: #777;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  background-color: rgba(245, 245, 245, 0.5);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  animation: floating 4s ease-in-out infinite;
+}
+.image-placeholder:hover {
+  background-color: rgba(245, 245, 245, 0.8);
+  border-color: var(--secondary-accent);
+}
+
+.file-input-hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* --- Table Avatars (Passport Style) --- */
+.table-avatar {
+  width: 38px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: block;
+}
+
+.table-avatar-placeholder {
+  width: 38px;
+  height: 48px;
+  border-radius: 4px;
+  background-color: #eee;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  text-align: center;
+  line-height: 1.1;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* --- Empty Placeholder Rows --- */
+.empty-row td {
+  height: 85px; /* Force row height to perfectly match rows with avatars */
+}
+
+.text-muted {
+  color: #bbb;
+  font-weight: 300;
 }
