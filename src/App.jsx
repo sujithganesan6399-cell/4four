@@ -43,24 +43,28 @@ const App = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="header">
-        <h2>Mark Attendance </h2>
+    <div className="app-wrapper">
+      <div className="app-background"></div>
+      
+      <div className="dashboard-container">
+        <div className="header">
+          <h2>Mark Attendance</h2>
+        </div>
+
+        <AttendanceForm 
+          onAdd={handleAddRecord} 
+          onUpdate={handleUpdateRecord} 
+          onCancel={handleCancelEdit}
+          editingRecord={editingRecord}
+        />
+
+        <AttendanceTable 
+          records={records} 
+          onEdit={handleEditInit} 
+          onDelete={handleDeleteRecord} 
+          editingId={editingRecord?.id || null} 
+        />
       </div>
-
-      <AttendanceForm 
-        onAdd={handleAddRecord} 
-        onUpdate={handleUpdateRecord} 
-        onCancel={handleCancelEdit}
-        editingRecord={editingRecord}
-      />
-
-      <AttendanceTable 
-        records={records} 
-        onEdit={handleEditInit} 
-        onDelete={handleDeleteRecord} 
-        editingId={editingRecord?.id || null} 
-      />
     </div>
   );
 };

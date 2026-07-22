@@ -12,23 +12,25 @@ const initialFormState = {
 
 const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord }) => {
   const [formData, setFormData] = useState(initialFormState);
-  const [locationRevealed, setLocationReveale] = useState(false);
+  const [locationRevealed, setLocationRevealed] = useState(false);
 
+  // When editingRecord changes, populate the form or clear it
   useEffect(() => {
     if (editingRecord) {
       setFormData(editingRecord);
       if (editingRecord.location) {
-        setLocationReveale(true);
+        setLocationRevealed(true); // Keep location open if it has a value
       }
     } else {
       setFormData(initialFormState);
-      setLocationRevle(false);
+      setLocationRevealed(false);
     }
   }, [editingRecord]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    // Validation constraints
     if (name === 'age') {
       setFormData({ ...formData, age: value.replace(/\D/g, '').slice(0, 2) });
       return;
@@ -50,7 +52,7 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord }) => {
     }
 
     if (name === 'location' && value !== '') {
-      setLocationReveale(true);
+      setLocationRevealed(true);
     }
   };
 
@@ -62,15 +64,7 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord }) => {
       onAdd(formData);
     }
     setFormData(initialFormState);
-    setLocationReveale(false);
-  };
-
-  // --- NEW SLIDER LOGIC ---
-  const handleLocationMouseLeave = () => {
-    // Only slide back if no location has been selected
-    if (formData.location === '') {
-      setLocationReveale(false);
-    }
+    setLocationRevealed(false);
   };
 
   return (
@@ -115,13 +109,11 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord }) => {
         </label>
       </div>
 
-      {/* UPDATED LOCATION CONTAINER */}
       <div 
         className={`form-group location-group ${locationRevealed ? 'revealed' : ''}`}
-        onMouseEnter={() => setLocationReveale(true)}
-        onMouseLeave={handleLocationMouseLeave}
+        onMouseEnter={() => setLocationRevealed(true)}
       >
-        <label>Location</label>
+        <label>Location</label>  
         <div className="location-slide-container">
            <span className="hover-prompt">{!locationRevealed ? 'Hover to select ----->' : ''}</span>
            <select name="location" value={formData.location} onChange={handleInputChange} required>

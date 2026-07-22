@@ -30,6 +30,7 @@ const AttendanceTable = ({ records, onEdit, onDelete, editingId }) => {
               <td>{record.email}</td>
               <td>
                 {record.mobile}
+                {/* Mobile Length Validation Notice */}
                 {record.mobile.length > 0 && record.mobile.length < 10 && (
                   <div className="error-msg">Error: Must be 10 digits</div>
                 )}
@@ -56,17 +57,9 @@ const AttendanceTable = ({ records, onEdit, onDelete, editingId }) => {
               </td>
             </tr>
           ))}
-          
-          {/* NEW UNIQUE EMPTY STATE */}
           {records.length === 0 && (
             <tr>
-              <td colSpan="9">
-                <div className="empty-state-message">
-                   <div className="empty-icon">📭</div>
-                   <h3>The Roster is Empty</h3>
-                   <p>No attendance records have been added yet. Fill out the form above to get started!</p>
-                </div>
-              </td>
+              <td colSpan="9" style={{ textAlign: 'center' }}>No attendance records found.</td>
             </tr>
           )}
         </tbody>
