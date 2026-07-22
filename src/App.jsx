@@ -66,68 +66,70 @@ const App = () => {
     <div className="app-wrapper">
       <div className="app-background"></div>
       
-      {!showDashboard ? (
-        <div className="home-page">
-          <div className="home-left-table">
-            <AttendanceTable records={filteredRecords} readonly={true} />
-          </div>
-          <div className="home-content">
-            <h1 className="home-title">Attendance<br/>Portal</h1>
-            <p className="home-subtitle">Manage your team securely with dashboard.</p>
-            
-            <div className="home-stats">
-              <div 
-                className={`stat-box ${tableFilter === 'All' ? 'active-filter' : ''}`}
-                onClick={() => setTableFilter('All')}
-              >
-                <h3>{totalRecords}</h3>
-                <p>Total Members</p>
-              </div>
-              <div 
-                className={`stat-box ${tableFilter === 'Present' ? 'active-filter' : ''}`}
-                onClick={() => setTableFilter('Present')}
-              >
-                <h3 className="stat-present">{totalPresent}</h3>
-                <p>Present</p>
-              </div>
-              <div 
-                className={`stat-box ${tableFilter === 'Absent' ? 'active-filter' : ''}`}
-                onClick={() => setTableFilter('Absent')}
-              >
-                <h3 className="stat-absent">{totalAbsent}</h3>
-                <p>Absent</p>
-              </div>
-            </div>
-
-            <button 
-              className="btn-enter-dashboard" 
-              onClick={() => setShowDashboard(true)}
-            >
-              Enter Dashboard
-            </button>
-          </div>
+      <div className={`home-page ${showDashboard ? 'background-dimmed' : ''}`}>
+        <div className="home-left-table">
+          <AttendanceTable records={filteredRecords} readonly={true} />
         </div>
-      ) : (
-        <div className="dashboard-container">
-          <div className="header dashboard-header">
-            <h2>Mark Attendance</h2>
-            <button className="btn-back" onClick={() => setShowDashboard(false)}>Back to Home</button>
+        <div className="home-content">
+          <h1 className="home-title">Attendance<br/>Portal</h1>
+          <p className="home-subtitle">Manage your team securely with dashboard.</p>
+          
+          <div className="home-stats">
+            <div 
+              className={`stat-box ${tableFilter === 'All' ? 'active-filter' : ''}`}
+              onClick={() => setTableFilter('All')}
+            >
+              <h3>{totalRecords}</h3>
+              <p>Total Members</p>
+            </div>
+            <div 
+              className={`stat-box ${tableFilter === 'Present' ? 'active-filter' : ''}`}
+              onClick={() => setTableFilter('Present')}
+            >
+              <h3 className="stat-present">{totalPresent}</h3>
+              <p>Present</p>
+            </div>
+            <div 
+              className={`stat-box ${tableFilter === 'Absent' ? 'active-filter' : ''}`}
+              onClick={() => setTableFilter('Absent')}
+            >
+              <h3 className="stat-absent">{totalAbsent}</h3>
+              <p>Absent</p>
+            </div>
           </div>
-        
-          <AttendanceForm 
-            onAdd={handleAddRecord} 
-            onUpdate={handleUpdateRecord} 
-            onCancel={handleCancelEdit}
-            editingRecord={editingRecord}
-            records={records}
-          />
 
-          <AttendanceTable 
-            records={records} 
-            onEdit={handleEditInit} 
-            onDelete={handleDeleteRecord} 
-            editingId={editingRecord?.id || null} 
-          />
+          <button 
+            className="btn-enter-dashboard" 
+            onClick={() => setShowDashboard(true)}
+          >
+            Enter Dashboard
+          </button>
+        </div>
+      </div>
+
+      {showDashboard && (
+        <div className="dashboard-overlay" onClick={() => setShowDashboard(false)}>
+          <div className="dashboard-container modal-style" onClick={(e) => e.stopPropagation()}>
+            <div className="header dashboard-header">
+              <h2>Mark Attendance</h2>
+              <button className="btn-back" onClick={() => setShowDashboard(false)}>✕ Close Dashboard</button>
+            </div>
+          
+            <AttendanceForm 
+              onAdd={handleAddRecord} 
+              onUpdate={handleUpdateRecord} 
+              onCancel={handleCancelEdit}
+              editingRecord={editingRecord}
+              records={records}
+            />
+
+            <AttendanceTable 
+              records={records} 
+              onEdit={handleEditInit} 
+              onDelete={handleDeleteRecord} 
+              editingId={editingRecord?.id || null} 
+            />
+          </div>
         </div>
       )}
 
