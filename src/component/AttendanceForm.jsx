@@ -124,8 +124,13 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord, records }) =
     e.preventDefault();
 
     // 1. Manual validation for Empty Fields (Replaces HTML 'required')
+    if (!formData.profileImage) {
+      triggerError('Missing Photo: Please upload a candidate photo!');
+      return;
+    }
+
     if (!formData.name || !formData.age || !formData.gender || !formData.email || !formData.mobile || !formData.location) {
-      triggerError('Missing Data: Please fill out all fields before submitting!');
+      triggerError('Missing Data: Please fill out all text fields!');
       return; 
     }
 
@@ -243,8 +248,8 @@ const AttendanceForm = ({ onAdd, onUpdate, onCancel, editingRecord, records }) =
         {imgPreview ? (
           <img className="floating-image-preview" src={imgPreview} alt="Preview" />
         ) : (
-          <div className="image-placeholder">
-            <span>Upload Photo</span>
+          <div className={`image-placeholder ${errorMessage.includes('Photo') ? 'error-pulse' : ''}`}>
+            <span>{errorMessage.includes('Photo') ? 'Photo Required!' : 'Upload Photo'}</span>
           </div>
         )}
         <input type="file" ref={imgRef} onChange={imgHandle} className="file-input-hidden" />

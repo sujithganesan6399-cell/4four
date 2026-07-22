@@ -15,9 +15,7 @@ const App = () => {
   
   // --- Computed Stats ---
   const totalRecords = records.length;
-  const totalPresent = records.filter(r => r.attendance === 'Present').length;
-  const totalAbsent = records.filter(r => r.attendance === 'Absent').length;
-
+ 
   const filteredRecords = tableFilter === 'All' 
     ? records 
     : records.filter(record => record.attendance === tableFilter);
@@ -40,7 +38,8 @@ const App = () => {
   }, []);
 
   const handleAddRecord = (newRecord) => {
-    setRecords([...records, { ...newRecord, id: Date.now() }]);
+    setRecords([{ ...newRecord, id: Date.now() }, ...records]);
+    setShowDashboard(false);
   };
 
   const handleUpdateRecord = (updatedRecord) => {
@@ -48,18 +47,23 @@ const App = () => {
       record.id === updatedRecord.id ? updatedRecord : record
     ));
     setEditingRecord(null);
+    setShowDashboard(false);
   };
 
   const handleDeleteRecord = (id) => {
-    setRecords(records.filter(record => record.id !== id));
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      setRecords(records.filter(record => record.id !== id));
+    }
   };
 
   const handleEditInit = (record) => {
     setEditingRecord(record);
+    setShowDashboard(true);
   };
 
   const handleCancelEdit = () => {
     setEditingRecord(null);
+    setShowDashboard(false);
   };
 
   return (
@@ -67,13 +71,7 @@ const App = () => {
       <div className="app-background"></div>
       
       <div className={`home-page ${showDashboard ? 'background-dimmed' : ''}`}>
-        <div className="home-left-table">
-          <AttendanceTable records={filteredRecords} readonly={true} />
-        </div>
-        <div className="home-content">
-          <h1 className="home-title">Attendance<br/>Portal</h1>
-          <p className="home-subtitle">Manage your team securely with dashboard.</p>
-          
+        <div className="home-top-bar">
           <div className="home-stats">
             <div 
               className={`stat-box ${tableFilter === 'All' ? 'active-filter' : ''}`}
@@ -82,28 +80,27 @@ const App = () => {
               <h3>{totalRecords}</h3>
               <p>Total Members</p>
             </div>
-            <div 
-              className={`stat-box ${tableFilter === 'Present' ? 'active-filter' : ''}`}
-              onClick={() => setTableFilter('Present')}
-            >
-              <h3 className="stat-present">{totalPresent}</h3>
-              <p>Present</p>
-            </div>
-            <div 
-              className={`stat-box ${tableFilter === 'Absent' ? 'active-filter' : ''}`}
-              onClick={() => setTableFilter('Absent')}
-            >
-              <h3 className="stat-absent">{totalAbsent}</h3>
-              <p>Absent</p>
-            </div>
           </div>
-
+          
           <button 
             className="btn-enter-dashboard" 
-            onClick={() => setShowDashboard(true)}
+            onClick={() => {
+              setEditingRecord(null);
+              setShowDashboard(true);
+            }}
           >
-            Enter Dashboard
+            + Mark Attendance
           </button>
+        </div>
+
+        <div className="home-main-table">
+          <AttendanceTable 
+            records={filteredRecords} 
+            readonly={false} 
+            onEdit={handleEditInit} 
+            onDelete={handleDeleteRecord} 
+            editingId={editingRecord?.id || null} 
+          />
         </div>
       </div>
 
@@ -111,8 +108,8 @@ const App = () => {
         <div className="dashboard-overlay" onClick={() => setShowDashboard(false)}>
           <div className="dashboard-container modal-style" onClick={(e) => e.stopPropagation()}>
             <div className="header dashboard-header">
-              <h2>Mark Attendance</h2>
-              <button className="btn-back" onClick={() => setShowDashboard(false)}>✕ Close Dashboard</button>
+              <h2>{editingRecord ? "Edit Record" : "Attendance Record"}</h2>
+              <button className="btn-back" onClick={handleCancelEdit}>✕ Close Form</button>
             </div>
           
             <AttendanceForm 
@@ -122,28 +119,8 @@ const App = () => {
               editingRecord={editingRecord}
               records={records}
             />
-
-            <AttendanceTable 
-              records={records} 
-              onEdit={handleEditInit} 
-              onDelete={handleDeleteRecord} 
-              editingId={editingRecord?.id || null} 
-            />
           </div>
         </div>
-      )}
-
-      {/* Floating Back to Home Button */}
-      {showDashboard && showScrollBtn && (
-        <button 
-          className="floating-back-btn"
-          onClick={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setShowDashboard(false);
-          }}
-        >
-          ⟵ Home
-        </button>
       )}
     </div>
   );
